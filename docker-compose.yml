@@ -1,0 +1,29 @@
+services:
+  app:
+    build: .
+    container_name: salesyodha_app
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/salesyodha_production
+      SPRING_DATASOURCE_USERNAME: prod_user
+      SPRING_DATASOURCE_PASSWORD: Yoddha@2026#
+      SPRING_PROFILES_ACTIVE: prod
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:10.6
+    container_name: salesyodha_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: salesyodha_production
+      MYSQL_USER: prod_user
+      MYSQL_PASSWORD: Yoddha@2026#
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
