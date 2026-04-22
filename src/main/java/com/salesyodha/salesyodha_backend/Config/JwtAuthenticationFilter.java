@@ -41,12 +41,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             String token = authHeader.substring(7);
-            String username = jwtService.extractUsername(token);
+            String mobileNumber = jwtService.extractPhoneNumber(token);
 
             // 🔥 3. Set authentication only if valid
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (mobileNumber != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(mobileNumber);
 
                 if (jwtService.isTokenValid(token, userDetails.getUsername())) {
 

@@ -20,19 +20,19 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // ✅ Generate Token
-    public String generateToken(String username, String role) {
+    // ✅ Generate Token with Phone + Role
+    public String generateToken(String phoneNumber, String role) {
         return Jwts.builder()
-                .setSubject(username)
-                .claim("role", role)
+                .setSubject(phoneNumber)   // 🔥 phone number as subject
+                .claim("role", role)      // 🔥 role add
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // ✅ Extract Username
-    public String extractUsername(String token) {
+    // ✅ Extract Phone Number
+    public String extractPhoneNumber(String token) {
         return extractAllClaims(token).getSubject();
     }
 
@@ -41,18 +41,18 @@ public class JwtService {
         return (String) extractAllClaims(token).get("role");
     }
 
-    // 🔥 NEW SYNTAX
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()   // ✅ correct
+        return Jwts.parser()
                 .setSigningKey(getSignKey())
                 .build()
-                .parseClaimsJws(token) // ✅ works here
+                .parseClaimsJws(token)
                 .getBody();
     }
 
-    // ✅ Validate Token
-    public boolean isTokenValid(String token, String username) {
-        return extractUsername(token).equals(username) && !isTokenExpired(token);
+    // ✅ Validate
+    public boolean isTokenValid(String token, String phoneNumber) {
+        return extractPhoneNumber(token).equals(phoneNumber)
+                && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
