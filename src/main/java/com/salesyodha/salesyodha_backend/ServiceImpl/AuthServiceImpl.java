@@ -8,6 +8,7 @@ import com.salesyodha.salesyodha_backend.Dto.EmployeeDto.EmployeeRegisterRequest
 import com.salesyodha.salesyodha_backend.Dto.EmployeeDto.EmployeeRegisterResponse;
 import com.salesyodha.salesyodha_backend.Dto.LoginDto.LoginRequest;
 import com.salesyodha.salesyodha_backend.Dto.LoginDto.LoginResponse;
+import com.salesyodha.salesyodha_backend.Dto.ProfileResponseDTO;
 import com.salesyodha.salesyodha_backend.Entity.AccessCodeEntity;
 import com.salesyodha.salesyodha_backend.Entity.AdminEntities.AdminEntity;
 import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.EmployeeEntity;
@@ -15,6 +16,7 @@ import com.salesyodha.salesyodha_backend.Enum.Role;
 import com.salesyodha.salesyodha_backend.Reposetory.AccessCodeRepository;
 import com.salesyodha.salesyodha_backend.Reposetory.CompanyRepository;
 import com.salesyodha.salesyodha_backend.Reposetory.EmployeeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -177,5 +179,40 @@ public class AuthServiceImpl {
         }
 
         throw new RuntimeException("User not found");
+    }
+
+    @Transactional
+    public ApiResponse<?> getProfile(String token) {
+
+        String phone = jwtService.extractPhoneNumber(token);
+
+        ///  ADMIN
+        AdminEntity admin = companyRepo.findByMobileNumber(phone).orElse(null);
+
+        if (admin != null) {
+            ProfileResponseDTO response = ProfileResponseDTO.builder()
+                    .role(admin.getRole().name())
+                    .mobileNumber(admin.getMobileNumber())
+                    .companyName(admin.getCompanyName())
+                    .documentUrl(admin.getDocumentUrl())
+                    .gstNumber(admin.getGstNumber())
+                    .build();
+
+            return ApiResponse.success("Admin Profile fetched", response);
+        }
+
+        ///  EMPLOYEE
+        EmployeeEntity emp = employeeRepo.findByMobileNumber(phone)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        ProfileResponseDTO response = ProfileResponseDTO.builder()
+                .role(emp.getRole().name())
+                .employeeName(emp.getEmployeeName())
+                .mobileNumber(emp.getMobileNumber())
+                .companyName(emp.getCompany().getCompanyName())
+                .companyCode(emp.getCompany().getCompanyCode())
+                .build();
+
+        return ApiResponse.success("Employee Profile fetched", response);
     }
 }

@@ -33,4 +33,11 @@ public class AuthController {
         return authService.login(request);
     }
 
+    @GetMapping("/profile")
+    public ApiResponse<?> getProfile(
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        String token = authHeader.substring(7);
+        return authService.getProfile(token);
+    }
 }

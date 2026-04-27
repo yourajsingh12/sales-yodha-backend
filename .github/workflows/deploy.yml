@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout code
       - name: 📥 Checkout
         uses: actions/checkout@v3
 
-      # Deploy via SSH
       - name: 🚀 Deploy to VPS
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -26,25 +24,19 @@ jobs:
 
             APP_DIR="/root/salesyodha"
 
-            echo "📁 Setup directory"
             mkdir -p $APP_DIR
             cd $APP_DIR
 
-            echo "📥 Clone / Pull repo"
             if [ -d ".git" ]; then
               git reset --hard
               git pull origin main
             else
-              git clone https://github.com/yourajsingh12/sales-yodha-backend.git .
+              git clone git@github.com:yourajsingh12/sales-yodha-backend.git .
             fi
 
-            echo "🐳 Stop old containers"
             docker compose down || true
-
-            echo "🐳 Build & start"
             docker compose up -d --build
 
-            echo "🧹 Cleanup"
             docker system prune -f
 
             echo "✅ Deployment Done"

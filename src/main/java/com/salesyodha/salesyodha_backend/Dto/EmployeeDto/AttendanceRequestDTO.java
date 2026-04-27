@@ -6,7 +6,5 @@ import lombok.Data;
 public class AttendanceRequestDTO {
 
     private String punchInLocation;
-    private String startReadingKm;
-    private String selfieImage;
-    private String meterImage;
+    private Integer startReadingKm;
 }
