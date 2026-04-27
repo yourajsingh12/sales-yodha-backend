@@ -182,11 +182,11 @@ public class AttendanceServiceImpl {
                         .build()
         ).toList();
 
-        /// 📦 FINAL RESPONSE
+        ///  FINAL RESPONSE
         Map<String, Object> data = new HashMap<>();
         data.put("punchIn", punchInList);
         data.put("punchOut", punchOutList);
 
-        return ApiResponse.success("Attendance fetched successfully", data);
+        return ApiResponse.success("Attendance fetched", data);
     }
 }
