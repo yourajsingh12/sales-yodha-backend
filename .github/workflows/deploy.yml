@@ -34,8 +34,8 @@ jobs:
               git clone git@github.com:yourajsingh12/sales-yodha-backend.git .
             fi
 
-            docker compose down || true
-            docker compose up -d --build
+            docker-compose down || true
+            docker-compose up -d --build
 
             docker system prune -f
 
