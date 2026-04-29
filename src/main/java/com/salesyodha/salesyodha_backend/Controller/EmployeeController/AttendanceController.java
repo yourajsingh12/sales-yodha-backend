@@ -20,17 +20,18 @@ public class AttendanceController {
     @PostMapping("/punch-in")
     public ResponseEntity<ApiResponse<?>> punchIn(
             @RequestHeader("Authorization") String authHeader,
-            @RequestPart("data") @Valid AttendanceRequestDTO dto,
-            @RequestPart("selfieImage") MultipartFile selfieImage,
-            @RequestPart("meterImage") MultipartFile meterImage
+            @RequestParam String punchInLocation,
+            @RequestParam Integer startReadingKm,
+            @RequestParam MultipartFile selfieImage,
+            @RequestParam MultipartFile meterImage
     ) {
 
         String token = extractToken(authHeader);
 
         return ResponseEntity.ok(
                 attendanceService.punchIn(
-                        dto.getPunchInLocation(),
-                        dto.getStartReadingKm(),
+                        punchInLocation,
+                        startReadingKm,
                         selfieImage,
                         meterImage,
                         token
