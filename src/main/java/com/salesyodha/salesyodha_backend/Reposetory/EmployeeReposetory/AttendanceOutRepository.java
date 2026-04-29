@@ -1,4 +1,4 @@
-package com.salesyodha.salesyodha_backend.Reposetory;
+package com.salesyodha.salesyodha_backend.Reposetory.EmployeeReposetory;
 
 import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.AttendanceOutEntity;
 import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.EmployeeEntity;
@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface AttendanceOutRepository extends JpaRepository<AttendanceOutEntity, Long> {
     List<AttendanceOutEntity> findByEmployee(EmployeeEntity employee);
+    List<AttendanceOutEntity> findByEmployeeId(Long employeeId);
 }

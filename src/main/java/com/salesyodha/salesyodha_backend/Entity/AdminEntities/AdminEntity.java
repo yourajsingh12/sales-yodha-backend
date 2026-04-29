@@ -1,11 +1,13 @@
 package com.salesyodha.salesyodha_backend.Entity.AdminEntities;
 
+import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.EmployeeEntity;
 import com.salesyodha.salesyodha_backend.Enum.Role;
 import com.salesyodha.salesyodha_backend.Enum.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -56,6 +58,9 @@ public class AdminEntity {
             this.companyCode = generateCompanyCode();
         }
     }
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    private List<EmployeeEntity> employees;
 
     private String generateCompanyCode() {
         return "COMP-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();

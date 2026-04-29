@@ -1,4 +1,4 @@
-package com.salesyodha.salesyodha_backend.Reposetory;
+package com.salesyodha.salesyodha_backend.Reposetory.AdminReposetory;
 
 import com.salesyodha.salesyodha_backend.Entity.AdminEntities.AdminEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

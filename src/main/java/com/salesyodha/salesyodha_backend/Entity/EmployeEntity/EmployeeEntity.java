@@ -1,5 +1,6 @@
 package com.salesyodha.salesyodha_backend.Entity.EmployeEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.salesyodha.salesyodha_backend.Entity.AdminEntities.AdminEntity;
 import com.salesyodha.salesyodha_backend.Enum.Role;
 import com.salesyodha.salesyodha_backend.Enum.Status;
@@ -29,6 +30,8 @@ public class EmployeeEntity {
     @Column(nullable = false)
     private String password;
 
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
     private AdminEntity company;
