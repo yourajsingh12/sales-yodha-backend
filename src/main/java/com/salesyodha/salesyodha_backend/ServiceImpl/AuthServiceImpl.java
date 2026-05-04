@@ -195,6 +195,7 @@ public class AuthServiceImpl {
                     .mobileNumber(admin.getMobileNumber())
                     .companyName(admin.getCompanyName())
                     .documentUrl(admin.getDocumentUrl())
+                    .companyCode(admin.getCompanyCode())
                     .gstNumber(admin.getGstNumber())
                     .build();
 
