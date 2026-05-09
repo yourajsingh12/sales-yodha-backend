@@ -18,6 +18,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: root
+          port: 2222
           key: ${{ secrets.SSH_KEY }}
           script: |
             set -e
