@@ -36,13 +36,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // 🔥 VERY IMPORTANT (explicit match)
+                        //  VERY IMPORTANT (explicit match)
                         .requestMatchers(HttpMethod.POST, "/api/auth/admin/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/employee/register").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/super/access/generate").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 
-                        // 🔥 fallback
+                        // fallback
                         .requestMatchers("/api/auth/**").permitAll()
 
                         .anyRequest().authenticated()

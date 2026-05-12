@@ -20,23 +20,23 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // ✅ Generate Token with Phone + Role
+    //  Generate Token with Phone + Role
     public String generateToken(String phoneNumber, String role) {
         return Jwts.builder()
-                .setSubject(phoneNumber)   // 🔥 phone number as subject
-                .claim("role", role)      // 🔥 role add
+                .setSubject(phoneNumber)
+                .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+//                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // ✅ Extract Phone Number
+    //  Extract Phone Number
     public String extractPhoneNumber(String token) {
         return extractAllClaims(token).getSubject();
     }
 
-    // ✅ Extract Role
+    //  Extract Role
     public String extractRole(String token) {
         return (String) extractAllClaims(token).get("role");
     }
@@ -49,7 +49,7 @@ public class JwtService {
                 .getBody();
     }
 
-    // ✅ Validate
+    //  Validate
     public boolean isTokenValid(String token, String phoneNumber) {
         return extractPhoneNumber(token).equals(phoneNumber)
                 && !isTokenExpired(token);
