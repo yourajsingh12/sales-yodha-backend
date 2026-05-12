@@ -26,7 +26,10 @@ public class JwtService {
                 .setSubject(phoneNumber)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-//                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .setExpiration(
+                        new Date(System.currentTimeMillis()
+                                + 1000L * 60 * 60 * 24 * 30)
+                )
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
