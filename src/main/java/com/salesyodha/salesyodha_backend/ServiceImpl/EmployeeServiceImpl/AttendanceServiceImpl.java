@@ -120,12 +120,27 @@ public class AttendanceServiceImpl {
 
     ///  FILE SAVE (SAFE VERSION)
     private String saveFile(MultipartFile file) {
+
         try {
+
             if (file == null || file.isEmpty()) {
                 throw new RuntimeException("File is empty");
             }
 
+            // ✅ Allow only images
+            String contentType = file.getContentType();
+
+            if (contentType == null ||
+                    !(contentType.equals("image/jpeg")
+                            || contentType.equals("image/png")
+                            || contentType.equals("image/jpg"))) {
+
+                throw new RuntimeException("Only JPG, JPEG, PNG allowed");
+            }
+
+            //  Docker container path
             String folder = System.getProperty("user.dir") + "/uploads/";
+
             java.io.File dir = new java.io.File(folder);
 
             if (!dir.exists()) {
@@ -133,11 +148,13 @@ public class AttendanceServiceImpl {
             }
 
             String original = file.getOriginalFilename();
+
             String ext = (original != null && original.contains("."))
                     ? original.substring(original.lastIndexOf("."))
                     : ".jpg";
 
             String fileName = System.currentTimeMillis() + ext;
+
             String filePath = folder + fileName;
 
             System.out.println("Saving file to: " + filePath);
@@ -145,8 +162,11 @@ public class AttendanceServiceImpl {
             file.transferTo(new java.io.File(filePath));
 
             return "uploads/" + fileName;
+
         } catch (Exception e) {
+
             e.printStackTrace();
+
             throw new RuntimeException("File upload failed");
         }
     }
@@ -159,7 +179,7 @@ public class AttendanceServiceImpl {
         List<AttendanceEntity> inList = attendanceRepository.findByEmployee(employee);
         List<AttendanceOutEntity> outList = attendanceOutRepository.findByEmployee(employee);
 
-        /// 🔁 MAP PUNCH IN
+        ///  MAP PUNCH IN
         List<AttendanceResponseDTO> punchInList = inList.stream().map(a ->
                 AttendanceResponseDTO.builder()
                         .id(a.getId())

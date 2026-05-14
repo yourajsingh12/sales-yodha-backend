@@ -33,6 +33,8 @@ WORKDIR /app
 # Copy jar from builder
 COPY --from=builder /app/target/*.jar app.jar
 
+RUN mkdir -p /app/uploads
+
 # Expose port
 EXPOSE 8080
 

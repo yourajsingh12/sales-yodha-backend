@@ -24,6 +24,9 @@ services:
     depends_on:
       - db
 
+    volumes:
+        - ./uploads:/app/uploads
+
   db:
     image: mariadb:10.6
     container_name: salesyodha_db
