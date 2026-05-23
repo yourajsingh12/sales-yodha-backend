@@ -14,7 +14,6 @@ import com.salesyodha.salesyodha_backend.Reposetory.EmployeeReposetory.NewPartyR
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,93 +42,75 @@ public class AdminServiceImpl {
     }
 
     /// =========================================
-    /// GET ALL EMPLOYEES ATTENDANCE IN
+    /// GET ATTENDANCE IN BY EMPLOYEE ID
     /// =========================================
     public List<AttendanceEntity>
-    getAllEmployeesAttendanceIn(
-            String token
+    getAttendanceInByEmployeeId(
+            String token,
+            Long employeeId
     ) {
 
-        AdminEntity admin = getAdmin(token);
+        /// ADMIN VALIDATE
+        getAdmin(token);
 
-        List<EmployeeEntity> employees =
-                employeeRepository.findByCompanyId(
-                        admin.getId()
-                );
+        EmployeeEntity employee =
+                employeeRepository.findById(employeeId)
 
-        List<AttendanceEntity> attendanceList =
-                new ArrayList<>();
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Employee Not Found"
+                                ));
 
-        for (EmployeeEntity employee : employees) {
-
-            attendanceList.addAll(
-
-                    attendanceRepository
-                            .findByEmployee(employee)
-            );
-        }
-
-        return attendanceList;
+        return attendanceRepository
+                .findByEmployee(employee);
     }
 
     /// =========================================
-    /// GET ALL EMPLOYEES ATTENDANCE OUT
+    /// GET ATTENDANCE OUT BY EMPLOYEE ID
     /// =========================================
     public List<AttendanceOutEntity>
-    getAllEmployeesAttendanceOut(
-            String token
+    getAttendanceOutByEmployeeId(
+            String token,
+            Long employeeId
     ) {
 
-        AdminEntity admin = getAdmin(token);
+        /// ADMIN VALIDATE
+        getAdmin(token);
 
-        List<EmployeeEntity> employees =
-                employeeRepository.findByCompanyId(
-                        admin.getId()
-                );
+        EmployeeEntity employee =
+                employeeRepository.findById(employeeId)
 
-        List<AttendanceOutEntity> attendanceList =
-                new ArrayList<>();
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Employee Not Found"
+                                ));
 
-        for (EmployeeEntity employee : employees) {
-
-            attendanceList.addAll(
-
-                    attendanceOutRepository
-                            .findByEmployee(employee)
-            );
-        }
-
-        return attendanceList;
+        return attendanceOutRepository
+                .findByEmployee(employee);
     }
 
     /// =========================================
-    /// GET ALL EMPLOYEES PARTIES
+    /// GET PARTIES BY EMPLOYEE ID
     /// =========================================
     public List<NewPartyEntity>
-    getAllEmployeesParties(
-            String token
+    getPartiesByEmployeeId(
+            String token,
+            Long employeeId
     ) {
 
-        AdminEntity admin = getAdmin(token);
+        /// ADMIN VALIDATE
+        getAdmin(token);
 
-        List<EmployeeEntity> employees =
-                employeeRepository.findByCompanyId(
-                        admin.getId()
-                );
+        EmployeeEntity employee =
+                employeeRepository.findById(employeeId)
 
-        List<NewPartyEntity> partyList =
-                new ArrayList<>();
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Employee Not Found"
+                                ));
 
-        for (EmployeeEntity employee : employees) {
-
-            partyList.addAll(
-
-                    newPartyRepository
-                            .findByEmployee(employee)
-            );
-        }
-
-        return partyList;
+        return newPartyRepository
+                .findByEmployee(employee);
     }
 
     /// =========================================

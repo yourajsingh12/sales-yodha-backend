@@ -34,59 +34,71 @@ public class AdminController {
     }
 
     /// =========================================
-    /// GET ALL ATTENDANCE IN
+    /// GET ATTENDANCE IN BY EMPLOYEE ID
     /// =========================================
-    @GetMapping("/attendance-in")
+    @GetMapping("/attendance-in/{employeeId}")
     public List<AttendanceEntity>
     getAttendanceIn(
 
             @RequestHeader("Authorization")
-            String authHeader
+            String authHeader,
+
+            @PathVariable
+            Long employeeId
 
     ) {
 
         return adminService
-                .getAllEmployeesAttendanceIn(
+                .getAttendanceInByEmployeeId(
 
-                        extractToken(authHeader)
+                        extractToken(authHeader),
+                        employeeId
                 );
     }
 
     /// =========================================
-    /// GET ALL ATTENDANCE OUT
+    /// GET ATTENDANCE OUT BY EMPLOYEE ID
     /// =========================================
-    @GetMapping("/attendance-out")
+    @GetMapping("/attendance-out/{employeeId}")
     public List<AttendanceOutEntity>
     getAttendanceOut(
 
             @RequestHeader("Authorization")
-            String authHeader
+            String authHeader,
+
+            @PathVariable
+            Long employeeId
 
     ) {
 
         return adminService
-                .getAllEmployeesAttendanceOut(
+                .getAttendanceOutByEmployeeId(
 
-                        extractToken(authHeader)
+                        extractToken(authHeader),
+                        employeeId
                 );
     }
 
     /// =========================================
-    /// GET ALL PARTIES
+    /// GET PARTIES BY EMPLOYEE ID
     /// =========================================
-    @GetMapping("/parties")
+    @GetMapping("/parties/{employeeId}")
     public List<NewPartyEntity>
     getParties(
 
             @RequestHeader("Authorization")
-            String authHeader
+            String authHeader,
+
+            @PathVariable
+            Long employeeId
 
     ) {
 
         return adminService
-                .getAllEmployeesParties(
+                .getPartiesByEmployeeId(
 
-                        extractToken(authHeader)
+                        extractToken(authHeader),
+                        employeeId
                 );
     }
 
