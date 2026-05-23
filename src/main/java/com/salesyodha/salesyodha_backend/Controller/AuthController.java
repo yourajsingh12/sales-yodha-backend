@@ -5,6 +5,7 @@ import com.salesyodha.salesyodha_backend.Dto.AdminDto.AdminRegisterResponse;
 import com.salesyodha.salesyodha_backend.Dto.ApiResponse;
 import com.salesyodha.salesyodha_backend.Dto.EmployeeDto.EmployeeRegisterRequest;
 import com.salesyodha.salesyodha_backend.Dto.EmployeeDto.EmployeeRegisterResponse;
+import com.salesyodha.salesyodha_backend.Dto.ForgotPasswordRequest;
 import com.salesyodha.salesyodha_backend.Dto.LoginDto.LoginRequest;
 import com.salesyodha.salesyodha_backend.Dto.LoginDto.LoginResponse;
 import com.salesyodha.salesyodha_backend.ServiceImpl.AuthServiceImpl;
@@ -40,4 +41,13 @@ public class AuthController {
         String token = authHeader.substring(7);
         return authService.getProfile(token);
     }
+
+
+    @PostMapping("/forgot-password")
+    public ApiResponse<?> forgotPassword(
+            @RequestBody ForgotPasswordRequest request
+    ) {
+        return authService.forgotPassword(request);
+    }
+
 }

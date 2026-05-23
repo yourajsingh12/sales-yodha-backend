@@ -1,5 +1,6 @@
 package com.salesyodha.salesyodha_backend.Entity.EmployeEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -44,6 +45,8 @@ public class AttendanceOutEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false)
+
+    @JsonIgnore
     private EmployeeEntity employee;
 
     @PrePersist

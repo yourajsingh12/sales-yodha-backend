@@ -6,6 +6,7 @@ import com.salesyodha.salesyodha_backend.Dto.AdminDto.AdminRegisterResponse;
 import com.salesyodha.salesyodha_backend.Dto.ApiResponse;
 import com.salesyodha.salesyodha_backend.Dto.EmployeeDto.EmployeeRegisterRequest;
 import com.salesyodha.salesyodha_backend.Dto.EmployeeDto.EmployeeRegisterResponse;
+import com.salesyodha.salesyodha_backend.Dto.ForgotPasswordRequest;
 import com.salesyodha.salesyodha_backend.Dto.LoginDto.LoginRequest;
 import com.salesyodha.salesyodha_backend.Dto.LoginDto.LoginResponse;
 import com.salesyodha.salesyodha_backend.Dto.ProfileResponseDTO;
@@ -215,5 +216,65 @@ public class AuthServiceImpl {
                 .build();
 
         return ApiResponse.success("Employee Profile fetched", response);
+    }
+
+
+    public ApiResponse<?> forgotPassword(
+            ForgotPasswordRequest request
+    ) {
+
+        /// ADMIN CHECK
+        AdminEntity admin = companyRepo
+                .findByMobileNumber(
+                        request.getMobileNumber()
+                )
+                .orElse(null);
+
+        if (admin != null) {
+
+            admin.setPassword(
+                    passwordEncoder.encode(
+                            request.getNewPassword()
+                    )
+            );
+
+            companyRepo.save(admin);
+
+            return ApiResponse.builder()
+                    .success(true)
+                    .message("Admin password updated successfully")
+                    .statusCode(200)
+                    .timestamp(LocalDateTime.now())
+                    .data(null)
+                    .build();
+        }
+
+        /// EMPLOYEE CHECK
+        EmployeeEntity employee = employeeRepo
+                .findByMobileNumber(
+                        request.getMobileNumber()
+                )
+                .orElse(null);
+
+        if (employee != null) {
+
+            employee.setPassword(
+                    passwordEncoder.encode(
+                            request.getNewPassword()
+                    )
+            );
+
+            employeeRepo.save(employee);
+
+            return ApiResponse.builder()
+                    .success(true)
+                    .message("Employee password updated successfully")
+                    .statusCode(200)
+                    .timestamp(LocalDateTime.now())
+                    .data(null)
+                    .build();
+        }
+
+        throw new RuntimeException("Mobile number not found");
     }
 }
