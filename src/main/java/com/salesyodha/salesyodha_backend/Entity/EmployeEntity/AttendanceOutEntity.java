@@ -6,6 +6,8 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Entity
 @Builder
@@ -51,6 +53,7 @@ public class AttendanceOutEntity {
 
     @PrePersist
     public void prePersist() {
-        this.punchOutTime = LocalDateTime.now();
+        this.punchOutTime = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"))
+                .toLocalDateTime();
     }
 }
