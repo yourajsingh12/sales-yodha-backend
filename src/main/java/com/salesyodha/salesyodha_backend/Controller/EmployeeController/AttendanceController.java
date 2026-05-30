@@ -21,6 +21,7 @@ public class AttendanceController {
     public ResponseEntity<ApiResponse<?>> punchIn(
             @RequestHeader("Authorization") String authHeader,
             @RequestParam String punchInLocation,
+            @RequestParam String  beatPlan,
             @RequestParam Integer startReadingKm,
             @RequestParam MultipartFile selfieImage,
             @RequestParam MultipartFile meterImage
@@ -31,6 +32,7 @@ public class AttendanceController {
         return ResponseEntity.ok(
                 attendanceService.punchIn(
                         punchInLocation,
+                        beatPlan,
                         startReadingKm,
                         selfieImage,
                         meterImage,

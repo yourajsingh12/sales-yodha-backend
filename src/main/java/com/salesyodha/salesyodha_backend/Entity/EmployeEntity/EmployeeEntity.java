@@ -44,6 +44,18 @@ public class EmployeeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(unique = true)
+    private String employeeCode;
+
+    private String profileImage;
+
+    private String bloodGroup;
+
+    @Column(columnDefinition = "TEXT")
+    private String fullAddress;
+
+    private String reportingManager;
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();

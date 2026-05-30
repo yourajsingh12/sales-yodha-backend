@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,15 @@ public class AttendanceServiceImpl {
     private final EmployeeRepository employeeRepository;
     private final JwtService jwtService;
 
+
+
+
+
+
     ///  PUNCH IN
     public ApiResponse<?> punchIn(
             String location,
+            String beatPlan,
             Integer startKm,
             MultipartFile selfie,
             MultipartFile meter,
@@ -34,6 +41,23 @@ public class AttendanceServiceImpl {
     ) {
 
         EmployeeEntity employee = getEmployee(token);
+
+
+        LocalDate today = LocalDate.now();
+
+        boolean alreadyPunchedIn = attendanceRepository
+                .findByEmployee(employee)
+                .stream()
+                .anyMatch(a ->
+                        a.getPunchInTime().toLocalDate().equals(today)
+                );
+
+        if (alreadyPunchedIn) {
+            return ApiResponse.error(
+                    "Attendance already punched in today",
+                    400
+            );
+        }
 
         if (startKm == null || startKm < 0) {
             return ApiResponse.error("Invalid Start KM", 400);
@@ -45,6 +69,7 @@ public class AttendanceServiceImpl {
         AttendanceEntity attendance = AttendanceEntity.builder()
                 .employee(employee)
                 .punchInLocation(location)
+                .beatPlan(beatPlan)
                 .startReadingKm(startKm)
                 .selfieImage(selfiePath)
                 .meterImage(meterPath)
@@ -56,6 +81,7 @@ public class AttendanceServiceImpl {
         AttendanceResponseDTO response = AttendanceResponseDTO.builder()
                 .id(attendance.getId())
                 .location(attendance.getPunchInLocation())
+                .beatPlan(attendance.getBeatPlan())
                 .km(attendance.getStartReadingKm())
                 .selfieImage(attendance.getSelfieImage())
                 .meterImage(attendance.getMeterImage())
@@ -76,6 +102,41 @@ public class AttendanceServiceImpl {
     ) {
 
         EmployeeEntity employee = getEmployee(token);
+
+        LocalDate today = LocalDate.now();
+
+
+        boolean alreadyPunchedOut = attendanceOutRepository
+                .findByEmployee(employee)
+                .stream()
+                .anyMatch(a ->
+                        a.getPunchOutTime().toLocalDate().equals(today)
+                );
+
+        if (alreadyPunchedOut) {
+            return ApiResponse.error(
+                    "Attendance already punched out today",
+                    400
+            );
+        }
+
+        boolean punchedInToday = attendanceRepository
+                .findByEmployee(employee)
+                .stream()
+                .anyMatch(a ->
+                        a.getPunchInTime().toLocalDate().equals(today)
+                );
+
+        if (!punchedInToday) {
+            return ApiResponse.error(
+                    "Please punch in first",
+                    400
+            );
+        }
+
+
+
+
 
         if (totalKm == null || totalKm < 0) {
             return ApiResponse.error("Invalid total KM", 400);
@@ -184,6 +245,7 @@ public class AttendanceServiceImpl {
                 AttendanceResponseDTO.builder()
                         .id(a.getId())
                         .location(a.getPunchInLocation())
+                        .beatPlan(a.getBeatPlan())
                         .km(a.getStartReadingKm())
                         .selfieImage(a.getSelfieImage())
                         .meterImage(a.getMeterImage())

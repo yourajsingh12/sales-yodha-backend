@@ -27,6 +27,12 @@ public class AttendanceEntity {
     @Column(nullable = false)
     private String punchInLocation;
 
+
+    @NotBlank
+    @Column(nullable = false)
+    private String beatPlan;
+
+
     @NotNull
     @Column(nullable = false)
     private Integer startReadingKm;

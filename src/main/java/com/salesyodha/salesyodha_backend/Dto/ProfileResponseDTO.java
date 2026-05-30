@@ -20,4 +20,11 @@ public class ProfileResponseDTO {
     // 🔹 EMPLOYEE
     private String employeeName;
     private String companyCode;
+    private String employeeCode;
+    private String bloodGroup;
+    private String fullAddress;
+    private String reportingManager;
+
+    private String profileImage;
+
 }

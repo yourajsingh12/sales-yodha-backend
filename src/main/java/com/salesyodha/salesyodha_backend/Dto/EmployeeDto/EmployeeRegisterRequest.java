@@ -9,4 +9,8 @@ public class EmployeeRegisterRequest {
     private String mobileNumber;
     private String password;
     private String companyCode;
+    private String employeeCode;
+    private String bloodGroup;
+    private String fullAddress;
+    private String reportingManager;
 }

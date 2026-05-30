@@ -26,6 +26,8 @@ public class AttendanceOutEntity {
     @Column(nullable = false)
     private String punchOutLocation;
 
+
+
     @NotNull
     @Column(nullable = false)
     private Integer endReadingKm;

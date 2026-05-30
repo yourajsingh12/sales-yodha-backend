@@ -17,11 +17,13 @@ import com.salesyodha.salesyodha_backend.Enum.Role;
 import com.salesyodha.salesyodha_backend.Reposetory.AccessCodeRepository;
 import com.salesyodha.salesyodha_backend.Reposetory.AdminReposetory.CompanyRepository;
 import com.salesyodha.salesyodha_backend.Reposetory.EmployeeReposetory.EmployeeRepository;
+import com.salesyodha.salesyodha_backend.Utility.FileUploadUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -34,6 +36,7 @@ public class AuthServiceImpl {
     private final AccessCodeRepository accessCodeRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final FileUploadUtil fileUploadUtil;
 
     //  ADMIN REGISTER
     public ApiResponse<AdminRegisterResponse> registerAdmin(AdminRegisterRequest request) {
@@ -99,6 +102,10 @@ public class AuthServiceImpl {
         EmployeeEntity employee = EmployeeEntity.builder()
                 .employeeName(request.getEmployeeName())
                 .mobileNumber(request.getMobileNumber())
+                .employeeCode(request.getEmployeeCode())
+                .bloodGroup(request.getBloodGroup())
+                .fullAddress(request.getFullAddress())
+                .reportingManager(request.getReportingManager())
                 .role(Role.EMPLOYEE)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .company(company)
@@ -198,6 +205,7 @@ public class AuthServiceImpl {
                     .documentUrl(admin.getDocumentUrl())
                     .companyCode(admin.getCompanyCode())
                     .gstNumber(admin.getGstNumber())
+
                     .build();
 
             return ApiResponse.success("Admin Profile fetched", response);
@@ -213,6 +221,11 @@ public class AuthServiceImpl {
                 .mobileNumber(emp.getMobileNumber())
                 .companyName(emp.getCompany().getCompanyName())
                 .companyCode(emp.getCompany().getCompanyCode())
+                .employeeCode(emp.getEmployeeCode())
+                .bloodGroup(emp.getBloodGroup())
+                .fullAddress(emp.getFullAddress())
+                .reportingManager(emp.getReportingManager())
+
                 .build();
 
         return ApiResponse.success("Employee Profile fetched", response);
@@ -276,5 +289,82 @@ public class AuthServiceImpl {
         }
 
         throw new RuntimeException("Mobile number not found");
+    }
+
+    @Transactional
+    public ApiResponse<?> updateEmployeeProfile(
+            String token,
+            String employeeName,
+            String bloodGroup,
+            String fullAddress,
+            String reportingManager,
+            MultipartFile profileImage
+    ) {
+
+        String phone = jwtService.extractPhoneNumber(token);
+
+        EmployeeEntity employee = employeeRepo
+                .findByMobileNumber(phone)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        if (employeeName != null)
+            employee.setEmployeeName(employeeName);
+
+        if (bloodGroup != null)
+            employee.setBloodGroup(bloodGroup);
+
+        if (fullAddress != null)
+            employee.setFullAddress(fullAddress);
+
+        if (reportingManager != null)
+            employee.setReportingManager(reportingManager);
+
+        if (profileImage != null && !profileImage.isEmpty()) {
+            employee.setProfileImage(
+                    fileUploadUtil.saveFile(profileImage)
+            );
+        }
+
+        employeeRepo.save(employee);
+
+        return ApiResponse.success(
+                "Employee profile updated successfully",
+                employee
+        );
+    }
+
+
+    @Transactional
+    public ApiResponse<?> updateCompanyProfile(
+            String token,
+            String companyName,
+            String gstNumber,
+            MultipartFile profileImage
+    ) {
+
+        String phone = jwtService.extractPhoneNumber(token);
+
+        AdminEntity company = companyRepo
+                .findByMobileNumber(phone)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        if (companyName != null)
+            company.setCompanyName(companyName);
+
+        if (gstNumber != null)
+            company.setGstNumber(gstNumber);
+
+        if (profileImage != null && !profileImage.isEmpty()) {
+            company.setProfileImage(
+                    fileUploadUtil.saveFile(profileImage)
+            );
+        }
+
+        companyRepo.save(company);
+
+        return ApiResponse.success(
+                "Company profile updated successfully",
+                company
+        );
     }
 }

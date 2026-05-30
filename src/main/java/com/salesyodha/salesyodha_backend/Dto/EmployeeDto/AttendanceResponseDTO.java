@@ -11,6 +11,7 @@ public class AttendanceResponseDTO {
 
     private Long id;
     private String location;
+    private String beatPlan;
     private Integer km;
     private Double totalKm;
     private String selfieImage;

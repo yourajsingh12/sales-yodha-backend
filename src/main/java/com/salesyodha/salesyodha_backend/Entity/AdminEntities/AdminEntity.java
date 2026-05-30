@@ -1,5 +1,6 @@
 package com.salesyodha.salesyodha_backend.Entity.AdminEntities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.EmployeeEntity;
 import com.salesyodha.salesyodha_backend.Enum.Role;
 import com.salesyodha.salesyodha_backend.Enum.Status;
@@ -59,11 +60,14 @@ public class AdminEntity {
         }
     }
 
+    private String profileImage;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
     private List<EmployeeEntity> employees;
 
     private String generateCompanyCode() {
-        return "COMP-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        return "BMZ-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
 }
