@@ -205,7 +205,7 @@ public class AuthServiceImpl {
                     .documentUrl(admin.getDocumentUrl())
                     .companyCode(admin.getCompanyCode())
                     .gstNumber(admin.getGstNumber())
-
+                    .profileImage(admin.getProfileImage())
                     .build();
 
             return ApiResponse.success("Admin Profile fetched", response);
@@ -225,7 +225,7 @@ public class AuthServiceImpl {
                 .bloodGroup(emp.getBloodGroup())
                 .fullAddress(emp.getFullAddress())
                 .reportingManager(emp.getReportingManager())
-
+                .profileImage(emp.getProfileImage())
                 .build();
 
         return ApiResponse.success("Employee Profile fetched", response);
