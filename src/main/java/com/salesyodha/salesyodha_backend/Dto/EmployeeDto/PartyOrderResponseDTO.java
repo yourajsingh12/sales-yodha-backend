@@ -10,25 +10,27 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NewPartyResponseDTO {
+public class PartyOrderResponseDTO {
 
     private Long id;
 
-    private String partyType;
+    private Long partyId;
 
     private String partyName;
 
-    private String shopkeeperName;
+    private String orderType;
 
-    private String contactNumber;
+    private Integer quantity;
 
-    private LocalDate partyDate;
+    private String flavour;
 
-    private String shopAddress;
+    private String remarks;
 
-    private String shopImage;
+    private LocalDate orderDate;
 
-    private String gstin;
+    private LocalDate deliveryDate;
+
+    private String orderStatus;
 
     private LocalDateTime createdAt;
 }

@@ -6,12 +6,14 @@ import com.salesyodha.salesyodha_backend.Dto.EmployeeDto.NewPartRequestPartyDto;
 import com.salesyodha.salesyodha_backend.Dto.EmployeeDto.NewPartyResponseDTO;
 import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.EmployeeEntity;
 import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.NewPartyEntity;
+import com.salesyodha.salesyodha_backend.Enum.OrderStatus;
 import com.salesyodha.salesyodha_backend.Reposetory.EmployeeReposetory.EmployeeRepository;
 import com.salesyodha.salesyodha_backend.Reposetory.EmployeeReposetory.NewPartyRepository;
 import com.salesyodha.salesyodha_backend.Utility.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -37,6 +39,7 @@ public class NewPartyServiceImpl {
 
         /// SET COMMON DATA
         setPartyData(party, dto);
+
 
         /// SAVE IMAGE
         if (dto.getShopImage() != null &&
@@ -179,10 +182,6 @@ public class NewPartyServiceImpl {
         party.setContactNumber(dto.getContactNumber());
         party.setPartyDate(dto.getPartyDate());
         party.setShopAddress(dto.getShopAddress());
-        party.setOrderType(dto.getOrderType());
-        party.setQuantity(dto.getQuantity());
-        party.setRemarks(dto.getRemarks());
-        party.setFlavour(dto.getFlavour());
         party.setGstin(dto.getGstin());
     }
 
@@ -203,10 +202,6 @@ public class NewPartyServiceImpl {
                 .partyDate(party.getPartyDate())
                 .shopAddress(party.getShopAddress())
                 .shopImage(party.getShopImage())
-                .orderType(party.getOrderType())
-                .quantity(party.getQuantity())
-                .remarks(party.getRemarks())
-                .flavour(party.getFlavour())
                 .gstin(party.getGstin())
                 .createdAt(party.getCreatedAt())
 
@@ -262,4 +257,8 @@ public class NewPartyServiceImpl {
                                 "Employee not found"
                         ));
     }
+
+
+
+
 }

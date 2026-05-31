@@ -42,4 +42,9 @@ public class NewPartRequestPartyDto {
 
     /// GST
     private String gstin;
+
+    private LocalDate orderDate;
+
+    private LocalDate deliveryDate;
+
 }
