@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,25 @@ public class AttendanceServiceImpl {
         EmployeeEntity employee = getEmployee(token);
 
 
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(
+                ZoneId.of("Asia/Kolkata")
+        );
+
+        System.out.println("TODAY = " + today);
+
+        attendanceRepository.findByEmployee(employee)
+                .forEach(a -> {
+                    System.out.println(
+                            "IN DATE = " +
+                                    a.getPunchInTime().toLocalDate()
+                    );
+                });
+
+        System.out.println(
+                "EMPLOYEE ID = " +
+                        employee.getId()
+        );
+
 
         boolean alreadyPunchedIn = attendanceRepository
                 .findByEmployee(employee)
@@ -103,7 +122,25 @@ public class AttendanceServiceImpl {
 
         EmployeeEntity employee = getEmployee(token);
 
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(
+                ZoneId.of("Asia/Kolkata")
+        );
+
+
+        System.out.println("TODAY = " + today);
+
+        attendanceRepository.findByEmployee(employee)
+                .forEach(a -> {
+                    System.out.println(
+                            "IN DATE = " +
+                                    a.getPunchInTime().toLocalDate()
+                    );
+                });
+
+        System.out.println(
+                "EMPLOYEE ID = " +
+                        employee.getId()
+        );
 
 
         boolean alreadyPunchedOut = attendanceOutRepository
@@ -273,4 +310,53 @@ public class AttendanceServiceImpl {
 
         return ApiResponse.success("Attendance fetched", data);
     }
+
+
+    public ApiResponse<?> getTodayStatus(String token) {
+
+        EmployeeEntity employee = getEmployee(token);
+
+        LocalDate today = LocalDate.now(
+                ZoneId.of("Asia/Kolkata")
+        );
+
+        AttendanceEntity attendanceIn = attendanceRepository
+                .findByEmployee(employee)
+                .stream()
+                .filter(a ->
+                        a.getPunchInTime()
+                                .toLocalDate()
+                                .equals(today))
+                .findFirst()
+                .orElse(null);
+
+        AttendanceOutEntity attendanceOut = attendanceOutRepository
+                .findByEmployee(employee)
+                .stream()
+                .filter(a ->
+                        a.getPunchOutTime()
+                                .toLocalDate()
+                                .equals(today))
+                .findFirst()
+                .orElse(null);
+
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("punchedIn", attendanceIn != null);
+        data.put("punchedOut", attendanceOut != null);
+
+        data.put(
+                "startKm",
+                attendanceIn != null
+                        ? attendanceIn.getStartReadingKm()
+                        : null
+        );
+
+        return ApiResponse.success(
+                "Today's attendance status",
+                data
+        );
+    }
+
+
 }

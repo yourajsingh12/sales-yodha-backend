@@ -13,6 +13,7 @@ services:
       - .env
 
     environment:
+      TZ: Asia/Kolkata
       SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/salesyodha_production
       SPRING_DATASOURCE_USERNAME: prod_user
 
@@ -36,6 +37,7 @@ services:
       - .env
 
     environment:
+      TZ: Asia/Kolkata
       MYSQL_ROOT_PASSWORD: root123
       MYSQL_DATABASE: salesyodha_production
       MYSQL_USER: prod_user
@@ -51,6 +53,9 @@ services:
 
     ports:
       - "8081:8080"
+
+    environment:
+      TZ: Asia/Kolkata
 
 volumes:
   db_data:

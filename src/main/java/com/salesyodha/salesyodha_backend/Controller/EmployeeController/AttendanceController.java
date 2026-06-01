@@ -86,4 +86,16 @@ public class AttendanceController {
         }
         return authHeader.substring(7);
     }
+
+    @GetMapping("/today-status")
+    public ResponseEntity<ApiResponse<?>> getTodayStatus(
+            @RequestHeader("Authorization") String authHeader
+    ) {
+
+        String token = extractToken(authHeader);
+
+        return ResponseEntity.ok(
+                attendanceService.getTodayStatus(token)
+        );
+    }
 }
