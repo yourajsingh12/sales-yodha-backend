@@ -1,5 +1,6 @@
 package com.salesyodha.salesyodha_backend.Controller.AdminController;
 
+import com.salesyodha.salesyodha_backend.Dto.ApiResponse;
 import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.AttendanceEntity;
 import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.AttendanceOutEntity;
 import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.EmployeeEntity;
@@ -112,6 +113,21 @@ public class AdminController {
         return token.replace(
                 "Bearer ",
                 ""
+        );
+    }
+
+    @GetMapping("/party-orders/{partyId}")
+    public ApiResponse<?> getPartyOrdersByPartyId(
+            @PathVariable Long partyId,
+            @RequestHeader("Authorization") String token
+    ) {
+
+        return ApiResponse.success(
+                "Party Orders Fetched",
+                adminService.getPartyOrdersByPartyId(
+                        token.replace("Bearer ", ""),
+                        partyId
+                )
         );
     }
 }

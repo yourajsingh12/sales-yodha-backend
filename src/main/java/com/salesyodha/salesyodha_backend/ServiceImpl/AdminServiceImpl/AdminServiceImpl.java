@@ -2,15 +2,9 @@ package com.salesyodha.salesyodha_backend.ServiceImpl.AdminServiceImpl;
 
 import com.salesyodha.salesyodha_backend.Config.JwtService;
 import com.salesyodha.salesyodha_backend.Entity.AdminEntities.AdminEntity;
-import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.AttendanceEntity;
-import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.AttendanceOutEntity;
-import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.EmployeeEntity;
-import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.NewPartyEntity;
+import com.salesyodha.salesyodha_backend.Entity.EmployeEntity.*;
 import com.salesyodha.salesyodha_backend.Reposetory.AdminReposetory.CompanyRepository;
-import com.salesyodha.salesyodha_backend.Reposetory.EmployeeReposetory.AttendanceOutRepository;
-import com.salesyodha.salesyodha_backend.Reposetory.EmployeeReposetory.AttendanceRepository;
-import com.salesyodha.salesyodha_backend.Reposetory.EmployeeReposetory.EmployeeRepository;
-import com.salesyodha.salesyodha_backend.Reposetory.EmployeeReposetory.NewPartyRepository;
+import com.salesyodha.salesyodha_backend.Reposetory.EmployeeReposetory.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +20,7 @@ public class AdminServiceImpl {
     private final AttendanceOutRepository attendanceOutRepository;
     private final NewPartyRepository newPartyRepository;
     private final JwtService jwtService;
+    private final PartyOrderRepository partyOrderRepository;
 
     /// =========================================
     /// GET MY EMPLOYEES
@@ -130,5 +125,24 @@ public class AdminServiceImpl {
                         new RuntimeException(
                                 "Admin not found"
                         ));
+    }
+
+
+    public List<PartyOrderEntity> getPartyOrdersByPartyId(
+            String token,
+            Long partyId
+    ) {
+
+        // Admin validate
+        getAdmin(token);
+
+        NewPartyEntity party =
+                newPartyRepository.findById(partyId)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Party Not Found"
+                                ));
+
+        return partyOrderRepository.findByParty(party);
     }
 }
